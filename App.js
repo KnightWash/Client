@@ -6,6 +6,7 @@ import {HomeScreen} from './Screens/Home'
 import {DetailsScreen} from './Screens/Home'
 import { Provider } from 'react-native-paper';
 
+
 const Stack = createStackNavigator();
 
 export default function App() {
