@@ -1,22 +1,18 @@
 import React from 'react';
-import {View, Text, Button, StyleSheet} from 'react-native';
+import { DefaultTheme, Provider as PaperProvider, Button } from 'react-native-paper';
+import {View, Text, StyleSheet} from 'react-native';
+import { WasherCardComponent } from '../components/WasherCard';
 
 export function HomeScreen({ navigation }) {
   return (
     <View style={style.container}>
-      <Text>Home Screen</Text>
-      <Button
-        title="Go to details"
-        onPress={() => navigation.navigate('Details')}
-      />
-    </View>
-  );
-}
-
-export function DetailsScreen() {
-  return (
-    <View style={style.container}>
-      <Text>Details Screen</Text>
+      <Text>Washers</Text>
+      <Button mode="contained"
+        onPress={() => navigation.openDrawer()}>
+          Press Me
+      </Button>
+      <WasherCardComponent/>
+      <WasherCardComponent/>
     </View>
   );
 }
@@ -24,7 +20,5 @@ export function DetailsScreen() {
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });

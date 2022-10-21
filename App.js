@@ -2,22 +2,36 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import {HomeScreen} from './Screens/Home'
-import {DetailsScreen} from './Screens/Home'
-import { Provider } from 'react-native-paper';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+//import { Drawer } from 'react-native-paper';
+import { DefaultTheme as DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { withTheme } from 'react-native-paper';
+import {HomeScreen} from './Screens/Home';
+import {DetailsScreen} from './Screens/Details';
+import {DrawerComponent} from './components/Drawer';
 
-const Stack = createStackNavigator();
+
+const Drawer = createDrawerNavigator();
+
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#0CA3FF',
+    secondary: 'white',
+  },
+};
 
 export default function App() {
   return (
-    <Provider>
+    <PaperProvider theme={theme}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Details" component={DetailsScreen} />
-        </Stack.Navigator>
+        <Drawer.Navigator initialRouteName="Home">
+          <Drawer.Screen name="Home" component={HomeScreen} />
+          <Drawer.Screen name="Details" component={DetailsScreen} />
+        </Drawer.Navigator>
       </NavigationContainer>
-    </Provider>
+    </PaperProvider>
 
   );
 }
