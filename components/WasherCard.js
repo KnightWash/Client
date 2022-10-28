@@ -1,20 +1,23 @@
 import * as React from 'react';
 import { Card, Title, Paragraph } from 'react-native-paper';
-import { StyleSheet, View } from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import { useRoute } from '@react-navigation/native';
 
-export function WasherCardComponent() {
-  return (
-    <View style={styles.border}>
-      <Card style={styles.container}>
-        <Card.Content>
-          <Title>Washer 1</Title>
-          <Paragraph>Time: 20:00</Paragraph>
-          <Card.Cover source={{ uri: 'https://picsum.photos/100/200' }} />
-        </Card.Content>
-      </Card>
-    </View>
+const WasherCardComponent = (props) => {
+  const route = useRoute();
+  return(
+  <View style = {styles.border}>
+  <Card style = {styles.container}>
+    <Card.Content>
+      <Title>Washer 1</Title>
+      <Paragraph style = {(props.data === "on") ? styles.washerOn : styles.washerOff}>{props.data}</Paragraph>
+      <Card.Cover style = {styles.washerImg} source={require('../assets/knightwash.png')} />
+    </Card.Content>
+  </Card>
+  </View>
   );
 }
+export default WasherCardComponent;
 
 const styles = StyleSheet.create({
   container: {
@@ -28,6 +31,16 @@ const styles = StyleSheet.create({
   border: {
     flex: .5,
     borderWidth: 1,
-    borderColor: "#ffffff",
+    borderColor:"#ffffff",
+  },
+  washerImg: {
+    width: 150,
+    height: 150
+  },
+  washerOn: {
+    color: "red",
+  },
+  washerOff: {
+    color: "green"
   }
 });
