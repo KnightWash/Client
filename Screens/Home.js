@@ -2,7 +2,7 @@ import Paho from "paho-mqtt"
 import React from 'react';
 import { DefaultTheme, Provider as PaperProvider, Button } from 'react-native-paper';
 import { View, Text, StyleSheet } from 'react-native';
-import { WasherCardComponent } from '../components/WasherCard';
+import WasherCardComponent from '../components/WasherCard';
 import { useState, useEffect, setIte } from 'react';
 
 client = new Paho.Client(
@@ -16,7 +16,7 @@ export function HomeScreen({ navigation }) {
   const [value, setValue] = useState("off");
 
   function onMessage(message) {
-    if (message.destinationName === "washer/value")
+    if (message.destinationName === "washer")
       console.log("received");
     setValue(message.payloadString);
   }
@@ -25,7 +25,7 @@ export function HomeScreen({ navigation }) {
     client.connect({
       onSuccess: () => {
         console.log("Connected!");
-        client.subscribe("washer/value");
+        client.subscribe("washer");
         client.onMessageArrived = onMessage;
       },
       onFailure: () => {
@@ -38,11 +38,7 @@ export function HomeScreen({ navigation }) {
     <View style={style.container}>
       <Text>Washers</Text>
       <Text>on/off value: {value}</Text>
-      <Button mode="contained"
-        onPress={() => navigation.openDrawer()}>
-        Press Me
-      </Button>
-      <WasherCardComponent />
+      <WasherCardComponent data = {value}/>
       <WasherCardComponent />
     </View>
   );
