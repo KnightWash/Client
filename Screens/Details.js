@@ -2,11 +2,10 @@ import React from 'react';
 import {View, Text, Button, StyleSheet} from 'react-native';
 import { WasherCardComponent } from '../components/WasherCard';
 
-export function DetailsScreen() {
+export function DetailsScreen({navigation}) {
   return (
     <View style={style.container}>
       <Text>Details Screen</Text>
-      <WasherCardComponent/>
     </View>
   );
 }

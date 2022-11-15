@@ -4,7 +4,7 @@ import {StyleSheet, View, Text} from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { Switch } from 'react-native-paper';
 
-const WasherCardComponent = (props) => {
+const DryerCardComponent = (props) => {
   const route = useRoute();
   const isSwitchOn = false;
   function onToggleSwitch() {
@@ -14,9 +14,9 @@ const WasherCardComponent = (props) => {
   <View style = {styles.border}>
   <Card style = {styles.container}>
     <Card.Content>
-      <Title>Washer 1</Title>
-      <Paragraph style = {(props.data === "on") ? styles.washerOn : styles.washerOff}>{props.data}</Paragraph>
-      <Card.Cover style = {styles.washerImg} source={require('../assets/knightwash.png')} />
+      <Title>Dryer 1</Title>
+      <Paragraph style = {(props.data === "on") ? styles.dryerOn : styles.dryerOff}>{props.data}</Paragraph>
+      <Card.Cover style = {styles.dryerImg} source={require('../assets/knightwash.png')} />
       <View style={styles.notifySection}>
         <Text style={styles.notifyText}>Notify me!</Text>
         <Switch style={styles.notifySwitch} value={isSwitchOn} onValueChange={onToggleSwitch} />
@@ -26,7 +26,7 @@ const WasherCardComponent = (props) => {
   </View>
   );
 }
-export default WasherCardComponent;
+export default DryerCardComponent;
 
 const styles = StyleSheet.create({
   container: {
@@ -42,14 +42,14 @@ const styles = StyleSheet.create({
     width: '50%',
     height: 230
   },
-  washerImg: {
+  dryerImg: {
     width: 100,
     height: 100
   },
-  washerOn: {
+  dryerOn: {
     color: "red",
   },
-  washerOff: {
+  dryerOff: {
     color: "green"
   },
   notifySection: {
