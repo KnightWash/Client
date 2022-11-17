@@ -10,6 +10,7 @@ import { ThemeColors } from "react-navigation";
 import { theme } from "../theme";
 import { color } from "react-native-reanimated";
 import { ScrollView } from "react-native-gesture-handler";
+import Hall from "../components/Hall";
 
 client = new Paho.Client(
   "test.mosquitto.org",
@@ -20,31 +21,50 @@ client = new Paho.Client(
 export function HomeScreen({ navigation }) {
 
   const [value, setValue] = useState("off");
+  const [value2, setValue2] = useState("off");
+
+  const [hall, setHall] = useState(beta);
+
+  const bolt = new Hall("Bolt", ["B/W/L", "B/D/LR"]);
+  const timmer = new Hall("Timmer", ["B/W/L", "B/D/LR"]);
+  const beta = new Hall("Beta", ["beta/washer/right", "beta/dryer/right"]);
+  const halls = [bolt, timmer, beta];
+
+  function menuCallback(hallData) {
+    const newHall = hallData;
+    setHall(newHall);
+    console.log(newHall);
+  }
 
   function onMessage(message) {
-    if (message.destinationName === "washer")
-      console.log("received");
-    setValue(message.payloadString);
+    if (message.destinationName === hall.getMachines()[0]) {
+      console.log("received from first washer");
+      setValue(message.payloadString);
+    } else if (message.destinationName === hall.getMachines()[1]) {
+      console.log("received from first dryer");
+      setValue2(message.payloadString);
+    }
   }
 
   useEffect(() => {
+    //client.unsubscribe(hall.getMachines()[0]);
     client.connect({
       onSuccess: () => {
         console.log("Connected!");
-        client.subscribe("washer");
+        client.subscribe(hall.getMachines()[0]);
+        client.subscribe(hall.getMachines()[1]);
         client.onMessageArrived = onMessage;
       },
       onFailure: () => {
         console.log("Failed to connect!");
       }
     });
-  }, [])
+  }, [hall])
 
   return (
     <ScrollView style={style.container}>
-      <LocationDropdownComponent></LocationDropdownComponent>
+            <LocationDropdownComponent parentCallback = {menuCallback} halls={halls}></LocationDropdownComponent>
       <Text style={style.largeLabelText}>Washers</Text>
-      <Text>on/off value: {value}</Text>
       <View style={style.cardContainer}>
         <WasherCardComponent data = {value}/>
         <WasherCardComponent data = {value}/>
@@ -55,20 +75,14 @@ export function HomeScreen({ navigation }) {
       </View>
       <Text style={style.largeLabelText}>Dryers</Text>
       <View style={style.cardContainer}>
-        <DryerCardComponent data = {value}/>
-        <DryerCardComponent data = {value}/>
+        <DryerCardComponent data = {value2}/>
+        <DryerCardComponent data = {value2}/>
       </View>
       <View style={style.cardContainer}>
-        <DryerCardComponent data = {value}/>
-        <DryerCardComponent data = {value}/>
+        <DryerCardComponent data = {value2}/>
+        <DryerCardComponent data = {value2}/>
       </View>
     </ScrollView>
-  );
-}
-
-export function LocationDropdownHeader() {
-  return (
-    <LocationDropdownComponent></LocationDropdownComponent>
   );
 }
 
