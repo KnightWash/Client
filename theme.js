@@ -5,6 +5,10 @@ const fontConfig = {
     large: {
       fontSize: 30,
       fontFamily: 'sans-serif'
+    },
+    medium: {
+      fontSize: 20,
+      fontFamily: 'sans-serif'
     }
   }
 }

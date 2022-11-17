@@ -19,9 +19,7 @@ export default function App() {
     <PaperProvider theme={theme}>
       <NavigationContainer>
         <Drawer.Navigator initialRouteName="Home">
-          <Drawer.Screen
-            name="Home" component={HomeScreen}
-            options={{ headerTitle: (props) => <LocationDropdownHeader {...props} /> }}/>
+          <Drawer.Screen name="Home" component={HomeScreen}/>
           <Drawer.Screen name="Details" component={DetailsScreen} />
         </Drawer.Navigator>
       </NavigationContainer>
