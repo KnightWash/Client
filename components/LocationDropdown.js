@@ -56,6 +56,7 @@ const style = StyleSheet.create({
     position:'absolute',
     right:'10%',
     left:'10%',
+    zIndex: 100,
   },
   cardContainer: {
     flex: 1,
