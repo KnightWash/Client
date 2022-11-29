@@ -3,9 +3,12 @@ import React from 'react';
 import { DefaultTheme, Provider as PaperProvider, Button, Menu } from 'react-native-paper';
 import { View, Text, StyleSheet } from 'react-native';
 import WasherCardComponent from '../components/WasherCard';
+import DryerCardComponent from '../components/DryerCard';
 import LocationDropdownComponent from '../components/LocationDropdown';
 import { useState, useEffect, setIte } from 'react';
+import { ThemeColors } from "react-navigation";
 import { theme } from "../theme";
+import { color } from "react-native-reanimated";
 import { ScrollView } from "react-native-gesture-handler";
 import Hall from "../components/Hall";
 import Machine from "../components/Machine";
@@ -33,6 +36,7 @@ export function HomeScreen({ navigation }) {
 
   function MachineComponents(props) {
     const washerList = props.machines;
+    //console.log("Got here!");
     console.log(props.machines);
     const washerMap = washerList.map((washer) =>
       <WasherCardComponent key = {washer.name} data = {washer}/>
@@ -50,11 +54,6 @@ export function HomeScreen({ navigation }) {
   }
 
   function onMessage(message) {
-    if (message.destinationName === hall.getMachines()[0]) {
-      setValue(message.payloadString);
-    } else if (message.destinationName === hall.getMachines()[1]) {
-      setValue2(message.payloadString);
-    }
     const newMachine = new Machine(message.destinationName, message.payloadString);
     if (washers.find(o => o.name === newMachine.getName()) !== newMachine && message.destinationName.includes("washer")) {
       setWashers([...washers, newMachine]);
