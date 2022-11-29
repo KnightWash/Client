@@ -14,7 +14,7 @@ const WasherCardComponent = (props) => {
   <View style = {styles.border}>
   <Card style = {styles.container}>
     <Card.Content>
-      <Title>{props.data.getName()}</Title>
+      <Title style = {{fontSize: 15}}>{props.data.getName()}</Title>
       <Paragraph style = {(props.data.getStatus() === "on") ? styles.washerOn : styles.washerOff}>{props.data.getStatus()}</Paragraph>
       <Card.Cover style = {styles.washerImg} source={require('../assets/knightwash.png')} />
       <View style={styles.notifySection}>
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     padding: 5,
     margin: 5,
-    width: '40%',
+    width: '45%',
   },
   border: {
     flex: 1,
