@@ -36,7 +36,6 @@ export function HomeScreen({ navigation }) {
 
   function MachineComponents(props) {
     const washerList = props.machines;
-    //console.log("Got here!");
     console.log(props.machines);
     const washerMap = washerList.map((washer) =>
       <WasherCardComponent key = {washer.name} data = {washer}/>
@@ -50,13 +49,18 @@ export function HomeScreen({ navigation }) {
   }
 
   function menuCallback(hallData) {
+    client.unsubscribe("/#");
     setHall(hallData);
   }
 
   function onMessage(message) {
     const newMachine = new Machine(message.destinationName, message.payloadString);
-    if (washers.find(o => o.name === newMachine.getName()) !== newMachine && message.destinationName.includes("washer")) {
+    //console.log(washers);
+    //console.log(washers.find(o => o.name === newMachine.name));
+    if (washers.find(o => o.getName() === newMachine.getName()) !== newMachine && message.destinationName.includes("washer")) {
+      console.log("got to set new washer");
       setWashers([...washers, newMachine]);
+      //console.log(washers);
     } else if (dryers.find(o => o.name === newMachine.getName()) !== newMachine && message.destinationName.includes("dryer")) {
       setDryers([...dryers, newMachine]);
     }
@@ -74,6 +78,9 @@ export function HomeScreen({ navigation }) {
         console.log("Failed to connect!");
       }
     });
+    // return () => {
+    //   client.unsubscribe("/#");
+    // };
   }, [hall])
 
   return (
