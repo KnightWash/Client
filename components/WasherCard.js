@@ -30,18 +30,18 @@ export default WasherCardComponent;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 0,
     justifyContent: 'flex-start',
-    padding: 5,
+    padding: 3,
     margin: 5,
-    width: '45%',
+    width: '90%',
   },
   border: {
-    flex: 1,
-    borderWidth: 0,
+    flex: 0,
+    borderWidth: 1,
     borderColor:"#ffffff",
     width: '50%',
-    height: 230
+    height: '50%'
   },
   washerImg: {
     width: 100,

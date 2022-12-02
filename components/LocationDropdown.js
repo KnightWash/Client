@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
+import { useState, useEffect, setIte, useRef } from 'react';
 import { Button, Menu, Divider, Provider, BottomNavigation } from 'react-native-paper';
 import { theme } from "../theme";
 import Hall from './Hall';
@@ -13,11 +14,17 @@ const LocationDropdownComponent = ({halls, parentCallback}) => {
   const closeMenu = () => setVisible(false);
 
   const changeHall = (selection) => {
-    newSelection = selection;
-    setHall(newSelection);
-    sendData();
-    closeMenu;
+    setHall(selection);
+    //sendData();
   };
+
+  const hallRef = useRef("");
+  useEffect(() => {
+    console.log("got to hallRef Dropdown! -------------");
+    hallRef.current = hall;
+    console.log(hallRef.current);
+    parentCallback(hallRef.current);
+  }, [hall]);
 
   sendData = () => {
     parentCallback(hall);
