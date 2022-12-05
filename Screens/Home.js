@@ -5,13 +5,16 @@ import { View, Text, StyleSheet } from 'react-native';
 import WasherCardComponent from '../components/WasherCard';
 import DryerCardComponent from '../components/DryerCard';
 import LocationDropdownComponent from '../components/LocationDropdown';
-import { useState, useEffect, setIte, useRef } from 'react';
+import { useState, useEffect, setIte, useRef, useContext } from 'react';
 import { ThemeColors } from "react-navigation";
 import { theme } from "../theme";
 import { color } from "react-native-reanimated";
 import { ScrollView } from "react-native-gesture-handler";
 import Hall from "../components/Hall";
 import Machine from "../components/Machine";
+//import { sendPushNotification, registerForPushNotificationsAsync, NotifContext } from "../App";
+
+
 
 client = new Paho.Client(
   "test.mosquitto.org",
@@ -19,11 +22,14 @@ client = new Paho.Client(
   `washer-${parseInt(Math.random() * 100)}`
 );
 
-export function HomeScreen({ navigation }) {
+export function HomeScreen({ navigation, route }) {
 
+  //const { expoPushToken, setExpoPushToken } = useContext(NotifContext);
   const initialMachines = [];
   const [washers, setWashers] = useState([...initialMachines]);
   const [dryers, setDryers] = useState([...initialMachines]);
+  // const [washerSwitchValues, setWasherSwitchValues] = useState([]);
+  // const [dryerSwitchValues, setDryerSwitchValues] = useState([]);
 
   // TODO: hall is not initialized as soon as the app is opened
   const [hall, setHall] = useState("beta");
@@ -35,10 +41,40 @@ export function HomeScreen({ navigation }) {
   const gamma = new Hall("gamma", ["gamma/washer/left", "gamma/dryer/left"]);
   const halls = [bolt, timmer, beta, gamma];
 
+
   function MachineComponents(props) {
+    //console.log("CALLING MACHINE COMPONENTS")
+
+    function childToParent(index, value) {
+      console.log("got to change notiflist");
+
+      //console.log(newList);
+      if (props.type === "washer") {
+        const newList = washersRef.current;
+        newList[index].notifs = value;
+        console.log(newList[index]);
+        setWashers(() => [...newList]);
+      } else if (props.type === "dryer") {
+        const newList = dryersRef.current;
+        newList[index].notifs = value;
+        setDryers(() => [...newList]);
+      }
+    }
+
+    // const notifRef = useRef([]);
+    // useEffect(() => {
+    //   if (props.type === "washer") {
+    //     notifRef.current = [...washerSwitchValues];
+    //   } else if (props.type === "dryer") {
+    //     notifRef.current = [...dryerSwitchValues];
+    //   }
+    //   //notifRef.current = [...switchValues];
+    //   console.log(notifRef.current);
+    // }, [washerSwitchValues, dryerSwitchValues]);
+
     const washerList = props.machines;
-    const washerMap = washerList.map((washer) =>
-      <WasherCardComponent key = {washer.name} data = {washer}/>
+    const washerMap = washerList.map((washer, index) =>
+      <WasherCardComponent key = {washer.name} data = {{washer: washer, value: washer.getNotifs(), index: index}} childToParent={childToParent}/>
     );
 
     return (
@@ -59,18 +95,23 @@ export function HomeScreen({ navigation }) {
   }
 
   function onMessage(message) {
-    const newMachine = new Machine(message.destinationName, message.payloadString);
+    const newMachine = new Machine(message.destinationName, message.payloadString, false);
 
     //console.log(currentSearch);
-    console.log(hallRef.current + "/washer");
+    //console.log(hallRef.current + "/washer");
     if (message.destinationName.includes(hallRef.current + "/washer")) {
       //console.log("Found a washer");
       const currentWasherSearch = washersRef.current.find(o => o.name === newMachine.name);
       let newList = washersRef.current;
       //console.log(newList);
       if (currentWasherSearch?.getName() === newMachine.getName()) {
+        // if (currentWasherSearch?.getNotifs() !== newMachine.getNotifs()) {
+        //   newMachine.notifs = currentWasherSearch.getNotifs();
+        // }
         console.log("got to update washer");
+        newMachine.notifs = currentWasherSearch?.notifs;
         newList[newList.indexOf(currentWasherSearch)] = newMachine;
+        //newList[newList.indexOf(newMachine)].notifs = washers[newList.indexOf(currentWasherSearch)].getNotifs();
         setWashers(() => [...newList]);
       } else {
         console.log("got to set new washer");
@@ -83,8 +124,13 @@ export function HomeScreen({ navigation }) {
       const currentDryerSearch = dryersRef.current.find(o => o.name === newMachine.name);
       let newList = dryersRef.current;
       if (currentDryerSearch?.getName() === newMachine.getName()) {
+        if (currentDryerSearch?.getNotifs() !== newMachine.getNotifs()) {
+          newMachine.notifs = currentDryerSearch.getNotifs();
+        }
         console.log("got to update dryer");
+        newMachine.notifs = currentDryerSearch?.notifs;
         newList[newList.indexOf(currentDryerSearch)] = newMachine;
+        //newList[newList.indexOf(newMachine)].notifs = washers[newList.indexOf(currentDryerSearch)].getNotifs();
         setDryers(() => [...newList]);
       } else {
         console.log("got to set new dryer");
@@ -99,14 +145,12 @@ export function HomeScreen({ navigation }) {
   useEffect(() => {
     //console.log("got to useEffect!");
     washersRef.current = [...washers];
-    //console.log(washersRef);
   }, [washers]);
 
   const dryersRef = useRef([]);
   useEffect(() => {
     //console.log("got to useEffect!");
     dryersRef.current = [...dryers];
-    //console.log(washersRef);
   }, [dryers]);
 
   const hallRef = useRef("");
@@ -131,18 +175,15 @@ export function HomeScreen({ navigation }) {
         console.log("Failed to connect!");
       }
     });
-    // return () => {
-    //    client.unsubscribe("/#");
-    // };
   }, [])
 
   return (
     <ScrollView style={style.container} contentContainerStyle={{ flexGrow: 1 }}>
       <LocationDropdownComponent parentCallback = {menuCallback} halls={halls}></LocationDropdownComponent>
       <Text style={style.largeLabelText}>Washers</Text>
-      <MachineComponents machines={washersRef.current}></MachineComponents>
+      <MachineComponents machines={washersRef.current} type={"washer"}></MachineComponents>
       <Text style={style.largeLabelText}>Dryers</Text>
-      <MachineComponents machines={dryersRef.current}></MachineComponents>
+      <MachineComponents machines={dryersRef.current} type={"dryer"}></MachineComponents>
     </ScrollView>
   );
 }
