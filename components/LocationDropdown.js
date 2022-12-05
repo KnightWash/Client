@@ -38,10 +38,10 @@ const LocationDropdownComponent = ({halls, parentCallback}) => {
           style={style.menu}
           visible={visible}
           onDismiss={closeMenu}
-          anchor={<Button onPress={openMenu}>{`${hall.getName()}`}</Button>}>
+          anchor={<Button onPress={openMenu}>{`${hall.getName()}`} ▼</Button>}>
           {halls.map((hall) => {
             return (
-              <Menu.Item onPress={() => {changeHall(hall)}} title={hall.getName()} />
+              <Menu.Item key={hall.getName()} onPress={() => {changeHall(hall)}} title={hall.getName()} />
             );
           })}
         </Menu>
