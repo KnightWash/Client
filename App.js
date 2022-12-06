@@ -9,13 +9,13 @@ import * as Notifications from 'expo-notifications';
 //import { Drawer } from 'react-native-paper';
 import { DefaultTheme as DefaultTheme, Provider as PaperProvider, Button } from 'react-native-paper';
 import { withTheme } from 'react-native-paper';
-import {HomeScreen, LocationDropdownHeader} from './Screens/Home';
-import {DetailsScreen} from './Screens/Details';
-import {DrawerComponent} from './components/Drawer';
-import {theme} from './theme';
-import {createContext} from 'react'
+import { HomeScreen, LocationDropdownHeader } from './Screens/Home';
+import { DetailsScreen } from './Screens/Details';
+import { DrawerComponent } from './components/Drawer';
+import { theme } from './theme';
+import { createContext } from 'react'
 
-export const NotifContext = createContext({expoPushToken: null, setExpoPushToken: (token) => {}})
+export const NotifContext = createContext({ expoPushToken: null, setExpoPushToken: (token) => { } })
 
 const Drawer = createDrawerNavigator();
 
@@ -56,13 +56,13 @@ export default function App() {
 
   return (
     <PaperProvider theme={theme}>
-      <NotifContext.Provider value={{expoPushToken, setExpoPushToken}}>
-      <NavigationContainer>
-        <Drawer.Navigator initialRouteName="Home">
-          <Drawer.Screen name="Home" component={HomeScreen}/>
-          <Drawer.Screen name="Details" component={DetailsScreen} />
-        </Drawer.Navigator>
-      </NavigationContainer>
+      <NotifContext.Provider value={{ expoPushToken, setExpoPushToken }}>
+        <NavigationContainer>
+          <Drawer.Navigator initialRouteName="Home">
+            <Drawer.Screen name="Home" component={HomeScreen} />
+            <Drawer.Screen name="Details" component={DetailsScreen} />
+          </Drawer.Navigator>
+        </NavigationContainer>
       </NotifContext.Provider>
     </PaperProvider>
 
@@ -75,7 +75,7 @@ export async function sendPushNotification(expoPushToken) {
     to: expoPushToken,
     sound: 'default',
     title: 'Machine has completed job',
-    body: 'Your machine has just turned off! please grab your laundry!',
+    body: 'Your machine has just turned off! Please grab your laundry!',
     data: { someData: 'goes here' },
   };
 
@@ -114,7 +114,7 @@ export async function registerForPushNotificationsAsync() {
       name: 'default',
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C',
+      lightColor: '#cbcadb',
     });
   }
 

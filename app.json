@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "senior-proj-app",
-    "slug": "senior-proj-app",
+    "name": "KnightWash",
+    "slug": "KnightWash",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#8C2131"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
